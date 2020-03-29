@@ -44,3 +44,9 @@ FIND DATA
 4.Find Patients who have history of cold
 
  db.patients.find({"history.disease": "cold"}).pretty()
+ 
+ *****************************************************************************************************************
+ 
+ Delete Patients who have col
+ 
+ 1.db.deleteMany({"history.disease": "cold"})
