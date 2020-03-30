@@ -84,13 +84,14 @@ Otherwise Go For Reference!
 
 Scenario: Comments one On Instagram Post!
 
-> use instagram
+ use instagram
 switched to db instagram
 > db.post.insertOne({user:"Disha Patani",comments:["Pretty","Hey There","Looking Great"]})
 {
         "acknowledged" : true,
         "insertedId" : ObjectId("5e81e3ed803b836b9740c109")
 }
+
  db.post.find().pretty()
 {
         "_id" : ObjectId("5e81e3ed803b836b9740c109"),
@@ -101,4 +102,5 @@ switched to db instagram
                 "Looking Great"
         ]
 }
+
 *************************************************************************************************************
