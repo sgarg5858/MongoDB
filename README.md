@@ -62,3 +62,18 @@ DELETING DATABASE/COLLECTIONS
  Drop Collection
  
  1. db.mycollection.drop()
+
+
+*************************************************************************************************************************
+RELATIONS:
+*************************************************************************************************************************
+1.One To One:
+
+In one to one it is preffered to use Embedded Documents Over References as there will be no duplicates
+
+For E.g Each Patient will Have its own Disease Summary
+
+i.  > db.patients.insertOne({name: "Mike", age: 22,diseaseSummary: {diseases: ["cold", "cough"]} })
+
+*************************************************************************************************************************
+2. One To Many:
