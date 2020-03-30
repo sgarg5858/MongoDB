@@ -50,3 +50,15 @@ FIND DATA
  Delete Patients who have col
  
  1.db.deleteMany({"history.disease": "cold"})
+ 
+ 
+ *******************************************************************************************************************
+ 
+DELETING DATABASE/COLLECTIONS
+ 
+ 1. use databaseName
+ 2. db.dropDatabase()
+ 
+ Drop Collection
+ 
+ 1. db.mycollection.drop()
