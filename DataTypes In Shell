@@ -1,0 +1,31 @@
+db.companies.insertOne(
+{ name: "Google", isStartUp: false, employees: 100000, revenu: 123456789123456789000, 
+details: {ceo: "Sundar Pichai"}, tags: [ {title: "Search Engine"}, {title: "AI"}], foundingDate: new Date(), 
+insertedAt: new Timestamp() }
+)
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5e816e0f2d3f61440d20d591")
+}
+> db.com
+db.commandHelp(  db.companies
+> db.companies.find().pretty()
+{
+        "_id" : ObjectId("5e816e0f2d3f61440d20d591"),
+        "name" : "Google",
+        "isStartUp" : false,
+        "employees" : 100000,
+        "revenu" : 123456789123456800000,
+        "details" : {
+                "ceo" : "Sundar Pichai"
+        },
+        "tags" : [
+                {
+                        "title" : "Search Engine"
+                },
+                {
+                        "title" : "AI"
+                }
+        ],
+        "foundingDate" : ISODate("2020-03-30T03:57:03.763Z"),
+        "insertedAt" : Timestamp(1585540623, 1)
