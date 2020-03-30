@@ -77,3 +77,28 @@ i.  > db.patients.insertOne({name: "Mike", age: 22,diseaseSummary: {diseases: ["
 
 *************************************************************************************************************************
 2. One To Many:
+
+In one to many we can use both Embedded or References if using Embedded Documents it is ensured that document size will always be less 
+than 16 mb then it is suggested to use Embedded as it will save one request.
+Otherwise Go For Reference!
+
+Scenario: Comments one On Instagram Post!
+
+> use instagram
+switched to db instagram
+> db.post.insertOne({user:"Disha Patani",comments:["Pretty","Hey There","Looking Great"]})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5e81e3ed803b836b9740c109")
+}
+ db.post.find().pretty()
+{
+        "_id" : ObjectId("5e81e3ed803b836b9740c109"),
+        "user" : "Disha Patani",
+        "comments" : [
+                "Pretty",
+                "Hey There",
+                "Looking Great"
+        ]
+}
+*************************************************************************************************************
