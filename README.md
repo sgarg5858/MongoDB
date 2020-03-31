@@ -82,6 +82,8 @@ In one to many we can use both Embedded or References if using Embedded Document
 than 16 mb then it is suggested to use Embedded as it will save one request.
 Otherwise Go For Reference!
 
+Embedded:
+
 Scenario: Comments one On Instagram Post!
 
  use instagram
@@ -103,4 +105,24 @@ switched to db instagram
         ]
 }
 
+Reference:
+
+use cityData
+switched to db cityData
+db.cities.insertOne({cityName:"New York", Country:"USA"})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5e82ce782d55ad169b0290a4")
+}
+
+Use _id of City as CityId in Citizens
+
+ db.citizens.insertMany([{name: "Sanjay",cityId: ObjectId("5e82ce782d55ad169b0290a4")},{ name: "Prim", cityId: ObjectId("5e82ce782d55ad169b0290a4")}])
+
+To fetch citizens Use Find query with filter
+db.citizens.find({cityId: ObjectId("5e82ce782d55ad169b0290a4")}).pretty()
+
+
 *************************************************************************************************************
+
+Many to Many:
