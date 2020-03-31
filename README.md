@@ -225,3 +225,45 @@ If Author gets older then we have to do changes in both collections so it preffe
 db.books.insertOne({name:"Apache Kafka",authorIds:[1,2]})
 
 Use References!
+
+*********************************************************************************************************************
+LOOK-UP
+
+Let's see how we can merge related Documents IN One Go instead of 2 steps
+
+we will use look-up
+
+we have one book in collection books and it has 2 authorIDs and in authors we have to authors
+
+db.books.aggregate([ {$lookup: {from:"authors", localField:"authorIds", foreignField: "authorId", as:"creators"}} ]).pretty()
+
+1.from => target collection
+2.localField => what should be used to merge
+3. foriegnField => against what localField should be checked.
+4.creators:any name here merged data will come
+
+output:
+
+{
+        "_id" : ObjectId("5e82e95b2d55ad169b0290ae"),
+        "name" : "Apache Kafka",
+        "authorIds" : [
+                1,
+                2
+        ],
+        "creators" : [
+                {
+                        "_id" : ObjectId("5e82e7c02d55ad169b0290ac"),
+                        "authorId" : 1,
+                        "authorName" : "ABC",
+                        "age" : 21
+                },
+                {
+                        "_id" : ObjectId("5e82e7c02d55ad169b0290ad"),
+                        "authorId" : 2,
+                        "authorName" : "BCD",
+                        "age" : 22
+                }
+        ]
+}
+
