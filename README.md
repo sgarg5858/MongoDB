@@ -319,6 +319,7 @@ It will Give ERROR with Message Document Failed Validation as creator is of numb
 
 
 **********************************************************************************************************************
+Ordered Insertions:
 
 Suppose we are using custom Id and we are trying to insertMany and if any id exists before then it will stop the operation there
 and won't try the next inserts 
@@ -327,3 +328,14 @@ If you want to try all inserts no matter what
 db.mycollection.insertMany([],{ordered:false}) 
 
 By Default it is True!
+
+
+
+**************************************************************************************************************************
+WriteConcern:
+
+Check Journal For this: For Higher Security: Acknowledgement after wriiten to memory and journal 
+Journal is backup for storage engine incase server fails to recover 
+Journal contains operations that haven't done yet on disk but are done in memory By default it is false
+
+db.mycollection.insertOne([],{writeConcern: {w: 1, j: true} }) 
