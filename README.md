@@ -86,9 +86,11 @@ Embedded:
 
 Scenario: Comments one On Instagram Post!
 
- use instagram
+use instagram
+
 switched to db instagram
-> db.post.insertOne({user:"Disha Patani",comments:["Pretty","Hey There","Looking Great"]})
+
+db.post.insertOne({user:"Disha Patani",comments:["Pretty","Hey There","Looking Great"]})
 {
         "acknowledged" : true,
         "insertedId" : ObjectId("5e81e3ed803b836b9740c109")
@@ -108,7 +110,9 @@ switched to db instagram
 Reference:
 
 use cityData
+
 switched to db cityData
+
 db.cities.insertOne({cityName:"New York", Country:"USA"})
 {
         "acknowledged" : true,
@@ -118,6 +122,7 @@ db.cities.insertOne({cityName:"New York", Country:"USA"})
 Use _id of City as CityId in Citizens
 
  db.citizens.insertMany([{name: "Sanjay",cityId: ObjectId("5e82ce782d55ad169b0290a4")},{ name: "Prim", cityId: ObjectId("5e82ce782d55ad169b0290a4")}])
+
 
 To fetch citizens Use Find query with filter
 db.citizens.find({cityId: ObjectId("5e82ce782d55ad169b0290a4")}).pretty()
