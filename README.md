@@ -159,3 +159,32 @@ switched to db shop
         "insertedId" : ObjectId("5e82d46f2d55ad169b0290a9")
 }
 
+
+Using MongoDB style USING 2 collections reference approach
+
+1. db.products.insertOne({price: 120, title:"Book"})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5e82d41a2d55ad169b0290a7")
+}
+
+
+2. db.customers.insertOne({name:"Sanjay", age:21, orders:[{productId:ObjectId("5e82d41a2d55ad169b0290a7", quantity:2}] })
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5e82d4352d55ad169b0290a8")
+}
+
+
+3. db.customers.find().pretty()
+{
+        "_id" : ObjectId("5e82d4352d55ad169b0290a8"),
+        "name" : "Sanjay",
+        "age" : 21,
+        "orders" : [
+                {
+                        "productId" : ObjectId("5e82d41a2d55ad169b0290a7"),
+                        "quantity" : 2
+                }
+        ]
+}
