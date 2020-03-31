@@ -131,3 +131,31 @@ db.citizens.find({cityId: ObjectId("5e82ce782d55ad169b0290a4")}).pretty()
 *************************************************************************************************************
 
 Many to Many:
+
+
+Basic SQL approach would be to use 3 tables
+
+1. db.dropDatabase()
+{ "dropped" : "shop", "ok" : 1 }
+
+2. use shop
+switched to db shop
+
+3. db.products.insertOne({price: 120, title:"Book"})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5e82d41a2d55ad169b0290a7")
+}
+
+4. db.customers.insertOne({name:"Sanjay", age:21})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5e82d4352d55ad169b0290a8")
+}
+
+5. db.orders.insertOne({custId: ObjectId("5e82d4352d55ad169b0290a8"), prodId:ObjectId("5e82d41a2d55ad169b0290a7")})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5e82d46f2d55ad169b0290a9")
+}
+
