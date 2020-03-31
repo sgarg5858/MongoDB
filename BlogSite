@@ -1,0 +1,69 @@
+Suppose we have to design Database for application where users can create,edit,delete posts comment on eah other posts!
+
+User  Post Comment 3 entities
+
+User can have many posts !
+
+Posts can have many comments! one comment will only belong to one post
+
+
+User
+_id:"Sanjay98"
+name:"Sanjay"
+age:21
+
+Posts:
+text:"Hello"
+creator:"Sanjay98"
+comments:[{username:"yumsunyum",comment:"Welcome"}]
+
+db.users.insertMany([{_id:"sanjay98",name:"Sanjay",age:21},{_id:"yumsunyum",name:"Sanyam",age:22}]) 
+
+db.posts.insertOne({"text":"My first Post",creator:"sanjay98",comments: [{username:"yumsunyum",comment:"Welcome To IG Babe"}]}) 
+
+db.posts.insertOne({"text":"My first IG Post",creator:"yumsunyum",comments: [{username:"sanjay98",comment:"Welcome To IG Babe"}]})
+
+db.users.aggregate([{$lookup:{from:"posts", localField:"_id", foreignField:"creator", as:"AllPosts"}} ])     
+
+
+
+{
+        "_id" : "sanjay98",
+        "name" : "Sanjay",
+        "age" : 21,
+        "AllPosts" : [
+                {
+                        "_id" : ObjectId("5e82fe3d2d55ad169b0290b2"),
+                        "text" : "My first Post",
+                        "creator" : "sanjay98",
+                        "comments" : [
+                                {
+                                        "username" : "yumsunyum",
+                                        "comment" : "Welcome To IG Babe"
+                                }
+                        ]
+                }
+        ]
+}
+{
+        "_id" : "yumsunyum",
+        "name" : "Sanyam",
+        "age" : 22,
+        "AllPosts" : [
+                {
+                        "_id" : ObjectId("5e82fe5d2d55ad169b0290b3"),
+                        "text" : "My first IG Post",
+                        "creator" : "yumsunyum",
+                        "comments" : [
+                                {
+                                        "username" : "sanjay98",
+                                        "comment" : "Welcome To IG Babe"
+                                }
+                        ]
+                }
+        ]
+}
+
+
+
+
