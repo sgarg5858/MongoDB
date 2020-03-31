@@ -188,3 +188,6 @@ Using MongoDB style USING 2 collections reference approach
                 }
         ]
 }
+
+If we use emdedded documents here then there is going to be a lot of duplication and if we have to update then we have to update in
+all customers who bought that product
