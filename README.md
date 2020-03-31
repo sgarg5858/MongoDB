@@ -191,3 +191,37 @@ Using MongoDB style USING 2 collections reference approach
 
 If we use emdedded documents here then there is going to be a lot of duplication and if we have to update then we have to update in
 all customers who bought that product
+
+Embedded Way:
+
+db.customers.insertOne({ name:"sanjay",orders: [{title: "Iphone", price:50000, quantity:2}]})
+
+If update in the products doesn't affect already orders as customer will not increased amount after placing order,
+we can also use embedded documents here.
+
+When to Use Reference Aproach!
+
+Suppose one book is written by multiple authors and one author may write multiple books
+
+Many to Many:
+
+db.books.insertOne({name:"Apache Kafka",authors:[{authorId:1,authorName:"ABC",age:21},{authorId:2,authorName:"BCD",age:22}]})
+
+
+ db.authors.insertMany([{
+...                         "authorId" : 1,
+...                         "authorName" : "ABC",
+...                         "age" : 21
+...                 },
+...                 {
+...                         "authorId" : 2,
+...                         "authorName" : "BCD",
+...                         "age" : 22
+...                 }
+...         ])
+
+If Author gets older then we have to do changes in both collections so it prefferd to use References here.
+
+db.books.insertOne({name:"Apache Kafka",authorIds:[1,2]})
+
+Use References!
