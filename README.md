@@ -266,4 +266,54 @@ output:
                 }
         ]
 }
+******************************************************************************************************************************
+
+Data Validation Schema 
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['text', 'creator', 'comments'],
+      properties: {
+        text: {
+          bsonType: 'string',
+          description: 'must be a string and is required'
+        },
+        creator: {
+          bsonType: 'string',
+          description: 'must be an objectid and is required'
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array and is required',
+          items: {
+            bsonType: 'object',
+            required: ['username', 'comment'],
+            properties: {
+              username: {
+                bsonType: 'string',
+                description: 'must be a string and is required'
+              },
+              string: {
+                bsonType: 'string',
+                description: 'must be an objectid and is required'
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+});
+
+It will createcollection with the given schema  
+
+db.posts.insertOne({text: "Hello IG", creator:"Sanjay98", comments: [ {username:"yumsunyum",comment:"Welcome Babe"} ] })  
+
+It will be inserted
+
+db.posts.insertOne({text: "Hello IG", creator:123, comments: [ {username:"yumsunyum",comment:"Welcome Babe"} ] })  
+
+It will Give ERROR with Message Document Failed Validation as creator is of number but required is string!
 
