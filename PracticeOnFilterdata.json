@@ -1,0 +1,134 @@
+[
+  {
+    "title": "The Last Student Returns",
+    "meta": { "rating": 9.5, "aired": 2018, "runtime": 100 },
+    "visitors": 1300000,
+    "expectedVisitors": 1550000,
+    "genre": ["thriller", "drama", "action"]
+  },
+  {
+      "title": "Supercharged Teaching",
+      "meta": {"rating": 9.3, "aired": 2016, "runtime": 60},
+      "visitors": 370000,
+      "expectedVisitors": 1000000,
+      "genre": ["thriller", "action"]
+  },
+  {
+      "title": "Teach me if you can",
+      "meta": {"rating": 8.5, "aired": 2014, "runtime": 90},
+      "visitors": 590378,
+      "expectedVisitors": 500000,
+      "genre": ["action", "thriller"]
+  }
+]
+
+
+1.Rating >9.2 and Run time <100
+
+
+db.movies.find({$and: [ {"meta.rating":{$gt:9.2}},{"meta.runtime":{$lt:100}}]}).pretty()
+
+{
+        "_id" : ObjectId("5e84b01af350899249a3e26a"),
+        "title" : "Supercharged Teaching",
+        "meta" : {
+                "rating" : 9.3,
+                "aired" : 2016,
+                "runtime" : 60
+        },
+        "visitors" : 370000,
+        "expectedVisitors" : 1000000,
+        "genre" : [
+                "thriller",
+                "action"
+        ]
+}
+
+2. Movies that genre "action" or "drama"
+
+db.movies.find({$and: [ {"meta.rating":{$gt:9.2}},{"meta.runtime":{$lt:100}}]}).pretty()
+{
+        "_id" : ObjectId("5e84b01af350899249a3e26a"),
+        "title" : "Supercharged Teaching",
+        "meta" : {
+                "rating" : 9.3,
+                "aired" : 2016,
+                "runtime" : 60
+        },
+        "visitors" : 370000,
+        "expectedVisitors" : 1000000,
+        "genre" : [
+                "thriller",
+                "action"
+        ]
+}
+> db.movies.find({$or: [ {genre:"action"},{genre:"drama"}]}).pretty()
+
+
+{
+        "_id" : ObjectId("5e84b01af350899249a3e268"),
+        "title" : "Teach me if you can",
+        "meta" : {
+                "rating" : 8.5,
+                "aired" : 2014,
+                "runtime" : 90
+        },
+        "visitors" : 590378,
+        "expectedVisitors" : 500000,
+        "genre" : [
+                "action",
+                "thriller"
+        ]
+}
+{
+        "_id" : ObjectId("5e84b01af350899249a3e269"),
+        "title" : "The Last Student Returns",
+        "meta" : {
+                "rating" : 9.5,
+                "aired" : 2018,
+                "runtime" : 100
+        },
+        "visitors" : 1300000,
+        "expectedVisitors" : 1550000,
+        "genre" : [
+                "thriller",
+                "drama",
+                "action"
+        ]
+}
+{
+        "_id" : ObjectId("5e84b01af350899249a3e26a"),
+        "title" : "Supercharged Teaching",
+        "meta" : {
+                "rating" : 9.3,
+                "aired" : 2016,
+                "runtime" : 60
+        },
+        "visitors" : 370000,
+        "expectedVisitors" : 1000000,
+        "genre" : [
+                "thriller",
+                "action"
+        ]
+}
+
+3.Movies that have visitors>expectedVisitors
+
+db.movies.find({$expr:{$gt:["$visitors","$expectedVisitors"]}}).pretty()
+
+
+{
+        "_id" : ObjectId("5e84b01af350899249a3e268"),
+        "title" : "Teach me if you can",
+        "meta" : {
+                "rating" : 8.5,
+                "aired" : 2014,
+                "runtime" : 90
+        },
+        "visitors" : 590378,
+        "expectedVisitors" : 500000,
+        "genre" : [
+                "action",
+                "thriller"
+        ]
+}
