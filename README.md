@@ -491,3 +491,10 @@ db.pages.insertMany([ {total:4,want:8},{total:34,want:23},{total:6,want:3},{tota
 It will give all docs where total > want:
 
 db.pages.find({$expr: {$gt: ["$total","$want"] } }).pretty()
+
+
+More Complex:
+
+If total>30 then total must be greater than want by 14.
+
+ db.pages.find({$expr: {$gt: [{$cond: {if: {$gte: ["$total",30]}, then: {$subtract: ["$total",14]}, else: "$total" }},"$want"] }}).pretty()
