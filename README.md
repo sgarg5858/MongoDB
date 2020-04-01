@@ -372,3 +372,20 @@ iv) db.movies.find({runtime:{$lt:30}}).pretty()  runtime <30
 v) db.movies.find({runtime:{$lte:30}}).pretty()  runtime <=30
 
 vi) db.movies.find({runtime:{$ne:30}}).pretty()   runtime !=30
+
+
+When Embedded Documents:
+
+db.movies.find({"rating.average" : {$eq:8}}).pretty()   rating equal to 30
+
+When Arrays:
+ 
+{genres:["Drama","Comedy"]}
+
+when searching for that particular genres in array Other elements doesn't matter
+
+db.movies.find({genres: "Drama"} ).pretty()   
+
+When Exact Match:
+
+db.movies.find({genres: ["Drama"] } ).pretty()  Make Array in Value MongoDB will look for Exact Array in Value
