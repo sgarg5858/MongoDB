@@ -373,7 +373,9 @@ v) db.movies.find({runtime:{$lte:30}}).pretty()  runtime <=30
 
 vi) db.movies.find({runtime:{$ne:30}}).pretty()   runtime !=30
 
+vii) db.movies.find({runtime:{$in: [30,42] }}).pretty()   runtime ==30 || runtime==42 matches any values in array to runtime field value
 
+viii)  db.movies.find({runtime:{$nin: [30,42] }}).pretty()   runtime !=30 && runtime!=42   Doesn't match any values in array to runtime field value
 When Embedded Documents:
 
 db.movies.find({"rating.average" : {$eq:8}}).pretty()   rating equal to 30
