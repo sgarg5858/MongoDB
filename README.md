@@ -434,6 +434,7 @@ Element Operators:
 
 db.userData.insertMany([ {name: "Sanjay",phone:1234567890,age:21},{name:"sanyam",phone:"1234567890"}])
 
+
 db.userData.find().pretty()
 {
         "_id" : ObjectId("5e847eecb5eb2cf2a5011104"),
@@ -447,15 +448,21 @@ db.userData.find().pretty()
         "phone" : "1234567890"
 }
 
+
 Where Age Field Exists 2nd Doc doesn't have age field So it gets filter out
 
+
 db.userData.find({age: {$exists: true}}).pretty()
+
+
 {
         "_id" : ObjectId("5e847eecb5eb2cf2a5011104"),
         "name" : "Sanjay",
         "phone" : 1234567890,
         "age" : 21
 }
+
+
   For checking age !=null and name=Sanjay
  db.userData.find({$and: [{age: {$exists: true, $ne: null }} ,{name:"Sanjay"} ]}).pretty()
  
@@ -484,7 +491,7 @@ db.userData.find({age: {$exists: true}}).pretty()
 
 $expr
 
-When we want to search documents based on some condition based on fields of document fields will be of one document
+When we want to search documents based on some condition based on fields of document and fields will be of one document
 
 db.pages.insertMany([ {total:4,want:8},{total:34,want:23},{total:6,want:3},{total:9,want:10}])
 
@@ -497,4 +504,13 @@ More Complex:
 
 If total>30 then total must be greater than want by 14.
 
- db.pages.find({$expr: {$gt: [{$cond: {if: {$gte: ["$total",30]}, then: {$subtract: ["$total",14]}, else: "$total" }},"$want"] }}).pretty()
+ db.pages.find( {$expr: 
+                  {$gt: 
+                    [{$cond: 
+                    {if: {$gte: ["$total",30]}, 
+                    then: {$subtract: ["$total",14]}, 
+                    else: "$total" }}
+                    ,"$want"] 
+                    }}).pretty()
+ 
+ 
