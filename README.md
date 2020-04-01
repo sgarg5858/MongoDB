@@ -339,3 +339,17 @@ Journal is backup for storage engine incase server fails to recover
 Journal contains operations that haven't done yet on disk but are done in memory By default it is false
 
 db.mycollection.insertOne([],{writeConcern: {w: 1, j: true} }) 
+
+
+***************************************************************************************************************************
+Importing Data:
+
+Stop Shell
+mongoimport tvshows.json -d moviesData -c movies --jsonArray --drop
+
+-d => DataBase
+-c => Collection
+-jsonArray => By Default it looks for only One Document So we have to specify For Multiple Documents
+--drop if moviesData.movies exists before then it tells to drop and create new one.
+
+****************************************************************************************************************************
