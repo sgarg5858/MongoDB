@@ -391,3 +391,78 @@ db.movies.find({genres: "Drama"} ).pretty()
 When Exact Match:
 
 db.movies.find({genres: ["Drama"] } ).pretty()  Make Array in Value MongoDB will look for Exact Array in Value
+
+
+***************************************************************************************************************************
+
+Logical Operators:
+
+1. OR operator:
+
+db.movies.find({$or: [{"rating.average": {$lt: 5} },{"rating.average": {$gt: 9.3 } } ]}).count()
+  
+For movies rating less than 5 and greater than 9.3
+
+2.NOR Operator
+
+db.movies.find({$nor: [{"rating.average": {$lt: 5} },{"rating.average": {$gt: 9.3 } } ]}).count()
+
+For movies not less than 5 and not greater than 9.3
+
+3. AND Operator:
+
+db.movies.find({$and: [{"rating.average": {$gt:9} },{genres:"Drama"} ]}).pretty()
+
+For movies having rating >9 and genre="Drama"
+
+4. NOT Operator:
+
+db.movies.find({runtime: {$not: {$eq: 60} } }).count()
+
+Runtime not equal to 60
+
+db.movies.find({runtime: {$ne: 60}  }).count()   can also be done using ne not equal
+
+
+*****************************************************************************************************************
+
+Element Operators:
+
+1. $exist   2. $type
+
+1. 
+
+db.userData.insertMany([ {name: "Sanjay",phone:1234567890,age:21},{name:"sanyam",phone:"1234567890"}])
+
+db.userData.find().pretty()
+{
+        "_id" : ObjectId("5e847eecb5eb2cf2a5011104"),
+        "name" : "Sanjay",
+        "phone" : 1234567890,
+        "age" : 21
+}
+{
+        "_id" : ObjectId("5e847eecb5eb2cf2a5011105"),
+        "name" : "sanyam",
+        "phone" : "1234567890"
+}
+
+Where Age Field Exists 2nd Doc doesn't have age field So it gets filter out
+
+db.userData.find({age: {$exists: true}}).pretty()
+{
+        "_id" : ObjectId("5e847eecb5eb2cf2a5011104"),
+        "name" : "Sanjay",
+        "phone" : 1234567890,
+        "age" : 21
+}
+  For checking age !=null and name=Sanjay
+ db.userData.find({$and: [{age: {$exists: true, $ne: null }} ,{name:"Sanjay"} ]}).pretty()
+ 
+ Will Give same as Above
+ 
+ 2. $type
+ 
+  db.userData.find({phone: {$type: ["string","number"]} } ).pretty()
+  
+  db.userData.find({phone: {$type: "string"} } ).pretty()
