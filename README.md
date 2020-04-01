@@ -353,3 +353,22 @@ mongoimport tvshows.json -d moviesData -c movies --jsonArray --drop
 --drop if moviesData.movies exists before then it tells to drop and create new one.
 
 ****************************************************************************************************************************
+
+Let's Dive Into Read Operations:
+
+Operators,Filters:
+
+1. Comparison Filters:
+https://docs.mongodb.com/manual/reference/operator/query-comparison/
+
+i) db.movies.find({runtime:{$eq:30}}).pretty()   runtime equal to 30
+
+ii) db.movies.find({runtime:{$gt:30}}).pretty()  runtime >30
+
+iii) db.movies.find({runtime:{$gte:30}}).pretty()  runtime >=30
+
+iv) db.movies.find({runtime:{$lt:30}}).pretty()  runtime <30
+
+v) db.movies.find({runtime:{$lte:30}}).pretty()  runtime <=30
+
+vi) db.movies.find({runtime:{$ne:30}}).pretty()   runtime !=30
