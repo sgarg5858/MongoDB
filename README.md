@@ -466,3 +466,28 @@ db.userData.find({age: {$exists: true}}).pretty()
   db.userData.find({phone: {$type: ["string","number"]} } ).pretty()
   
   db.userData.find({phone: {$type: "string"} } ).pretty()
+  
+  
+  **********************************************************************************************************************
+  Evaluating Operators:
+  
+  $regex
+  
+  For Finding text Snippet Most Efficent way of doing this is to use Text Indexes to which we come later
+  
+  If text is not to large then we can use $regex
+  
+  db.movies.find({summary: {$regex: /musical/}}).count()
+  
+  It will look for musical word in summaries of all docs It's nice but not th efiicient approach
+
+
+$expr
+
+When we want to search documents based on some condition based on fields of document fields will be of one document
+
+db.pages.insertMany([ {total:4,want:8},{total:34,want:23},{total:6,want:3},{total:9,want:10}])
+
+It will give all docs where total > want:
+
+db.pages.find({$expr: {$gt: ["$total","$want"] } }).pretty()
