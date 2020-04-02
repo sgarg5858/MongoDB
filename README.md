@@ -566,3 +566,10 @@ One Way is to use AND Operator
  but we need to check for cooking with freq>=4 
  
   db.mycollection.find({hobbies:{$elemMatch:{name:"Cooking",freq:{$gt:4}} }}).pretty()
+
+
+Suppose we want all movie records where genre: action and drama
+
+db.movies.find({genre:{$all:["thriller","action"]}}).pretty()
+
+If we don't use $all then order we specify if use $all then order won't matter
