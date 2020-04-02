@@ -573,3 +573,48 @@ Suppose we want all movie records where genre: action and drama
 db.movies.find({genre:{$all:["thriller","action"]}}).pretty()
 
 If we don't use $all then order we specify if use $all then order won't matter
+
+
+***************************************************************************************************************************
+
+Working With Cursor:
+
+Cursor returns data in batches
+
+When we run 
+db.mycollection.find()  
+
+query has ran on the server side and information is loaded into memory and is ready to delievered to us.
+
+$it is available only in shell
+
+In Drivers we have functions like .next()
+
+
+const dataCursor = db.tvshows.find()
+dataCursor.next()   //next will give you next element!
+
+
+ForEach  :
+
+dataCursor.forEach(doc => {printjson(doc)}) 
+
+Sorting:
+
+db.tvshows.find().sort({"rating.average":-1}) -1 for descending order and 1 for ascending order
+
+and we can also use multiple criteria for sorting but order matters!
+
+db.tvshows.find().sort({"rating.average":1,runtime:-1})
+
+Skipping Elements:
+
+db.tvshows.find().sort({"rating.average":1,runtime:-1}).skip(10).pretty()  
+
+Limit: Related To Pagination
+
+limit allows you to limit the no of retrieve elements
+
+db.tvshows.find().sort({"rating.average":1,runtime:-1}).skip(10).limit(2).pretty()  
+
+first we will find all then sort according to needs then we want to skip first 10 based on sorting and posing a limit of 2 per query
