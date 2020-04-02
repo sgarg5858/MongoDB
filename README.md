@@ -514,3 +514,55 @@ If total>30 then total must be greater than want by 14.
                     }}).pretty()
  
  
+ 
+ Array Queries:
+ 
+ 
+ 1. We have to find Users who have Hobby of Cooking
+ {
+        "_id" : 3,
+        "hobbies" : [
+                {
+                        "name" : "Cooking",
+                        "freq" : 4
+                },
+                {
+                        "name" : "Reading",
+                        "freq" : 7
+                },
+                {
+                        "name" : "Hiking",
+                        "freq" : 5
+                }
+        ]
+}
+ 
+ db.nycollection.find({"hobbies.name":"Cooking"}).prett();
+ 
+ 
+ 2. $size
+ 
+ We have to find user who have exactly 3 hobbies
+ 
+ db.mycollection.find(hobbies: {$size: 3}}.pretty()
+ 
+ This will not work: as $size needs a number
+ 
+ db.mycollection.find(hobbies: {$size: {$gt:2}}}.pretty()
+ 
+ 
+3. $elemMatch
+
+We have to find Users who Cooking with freq >=4
+
+One Way is to use AND Operator
+
+ 
+ db.mycollection.find({$and: [ {"hobbies.name:"Cooking"},{freq:{$gte:4}}} ] })
+ 
+ But this will not work!
+ 
+ As it can satisfy condition accross mutliple documents in Array
+ but we need to check for cooking with freq>=4 
+ 
+  db.mycollection.find({hobbies:{$elemMatch:{name:"Cooking",freq:{$gt:4}} }}).pretty()
