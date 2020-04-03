@@ -631,3 +631,65 @@ It also works on Embedded Documents for that check schedule  and if we don't wan
 Projection In Arrays:
 
 
+******************************************************************************************************************************
+
+UPDATE OPERATIONS:
+
+******************************************************************************************************************************
+$set 
+
+It just simply add/edits fields you specify by default it doesn't remove fields
+
+1. db.userData.updateMany({},{$set:{hobbies:[ {name:"cooking",freq:4},{name:"reading",freq:7}]}}) 
+
+If field doesn't exist it will create otherwise it will over ride the value we will see how to add new values to existing values
+
+Updating multiple fields
+
+2. db.userData.updateMany({},{$set:{age:20,phone:9041234556}})   
+
+
+********************************************************************************************************
+$inc
+
+{
+        "_id" : ObjectId("5e847eecb5eb2cf2a5011104"),
+        "name" : "Sanjay",
+        "phone" : 9041234556,
+        "age" : 20,
+        "hobbies" : [
+                {
+                        "name" : "cooking",
+                        "freq" : 4
+                },
+                {
+                        "name" : "reading",
+                        "freq" : 7
+                }
+        ]
+}
+{
+        "_id" : ObjectId("5e847eecb5eb2cf2a5011105"),
+        "name" : "sanyam",
+        "phone" : 9041234556,
+        "hobbies" : [
+                {
+                        "name" : "cooking",
+                        "freq" : 4
+                },
+                {
+                        "name" : "reading",
+                        "freq" : 7
+                }
+        ],
+        "age" : 20
+}
+Suppose Sanyam got older by 1 year and we have to update his Age!
+
+db.userData.updateMany({name:"sanyam"},{$inc:{age:1}})   
+
+We can use multiple Operators:
+
+db.userData.updateMany({name:"sanyam"},{$inc:{age:1},$set:{college:"UIET"}})   
+
+For decrementing values use negatie=ve values!
