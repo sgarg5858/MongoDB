@@ -618,3 +618,16 @@ limit allows you to limit the no of retrieve elements
 db.tvshows.find().sort({"rating.average":1,runtime:-1}).skip(10).limit(2).pretty()  
 
 first we will find all then sort according to needs then we want to skip first 10 based on sorting and posing a limit of 2 per query
+
+
+******************************************************************************************************************
+
+PROJECTION:
+
+db.tvshows.find({},{name:1, genres:1, runtime:1, rating:1, "schedule.time":1, _id:0}).pretty()  
+
+It also works on Embedded Documents for that check schedule  and if we don't want _id we have to specify it
+
+Projection In Arrays:
+
+
