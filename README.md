@@ -684,6 +684,7 @@ $inc
         ],
         "age" : 20
 }
+
 Suppose Sanyam got older by 1 year and we have to update his Age!
 
 db.userData.updateMany({name:"sanyam"},{$inc:{age:1}})   
@@ -692,4 +693,43 @@ We can use multiple Operators:
 
 db.userData.updateMany({name:"sanyam"},{$inc:{age:1},$set:{college:"UIET"}})   
 
-For decrementing values use negatie=ve values!
+For decrementing values use negative values!
+
+Working On the SameField is not allowed..
+
+$min
+
+db.userData.updateMany({name:"sanyam"},{$min:{age:21}})
+
+It will work if new value is less than old value
+
+$max
+
+db.userData.updateMany({name:"sanyam"},{$max:{age:25}})
+
+It will modidy age if the new value is greater than old value
+
+$mul multiply
+
+db.userData.updateMany({name:"sanyam"},{$mul:{age:1.5}}) 
+
+******************************************************************************************************************
+Getting Rid Of Fields:
+
+Suppose for sanjay we want to drop phone field:
+
+ db.userData.updateMany({name:"Sanjay"},{$unset:{phone:" "}})  
+ 
+ *****************************************************************************************************************
+ 
+ Renaming Fields:
+ 
+db.userData.updateMany({},{$rename:{age:"currAge"}}) 
+
+**********************************************************************************************************************
+
+Upsert:
+
+db.userData.updateOne({name:"Prim"},{$set:{age:22,Hobbies:[{name:"Reading",freq:1}]}},{upsert:true})  
+
+If it find document then it will override otherwise create new one
