@@ -931,6 +931,23 @@ if you try to add same document push will allow it but $addToSet will not allow 
 
 **********************************************************************************************************************************
 INDEXES
+
+https://docs.mongodb.com/manual/indexes/
+
+Indexes support the efficient execution of queries in MongoDB. Without indexes, MongoDB must perform a collection scan, i.e. 
+
+scan every document in a collection, to select those documents that match the query statement. If an appropriate index exists for a 
+
+query, MongoDB can use the index to limit the number of documents it must inspect.
+
+Indexes are special data structures [1] that store a small portion of the collection’s data set in an easy to traverse form. 
+
+The index stores the value of a specific field or set of fields, ordered by the value of the field. 
+
+The ordering of the index entries supports efficient equality matches and range-based query operations.
+
+In addition, MongoDB can return sorted results by using the ordering in the index.
+
 **********************************************************************************************************************************
 Why Use Indexes?
 
@@ -968,7 +985,7 @@ Adding Single Field Indexes!
  Without Index it took 1 milliseconds
  
  
- Disadvantges:
+ Restrictions:
  
  when query returns large part of documents then using index can be slower as it will first go through indexes and then it will through
  
@@ -980,3 +997,49 @@ Adding Single Field Indexes!
  
  Indexes are helpful when you narrow down or need small number of documents.
  
+ *********************************************************************************************************************
+ 
+ Compund Indexes:     https://docs.mongodb.com/manual/core/index-compound/    limit of 32 fields
+ 
+ The order of fields listed in a compound index has significance. For instance, 
+ 
+ if a compound index consists of { userid: 1, score: -1 }, 
+  
+ the index sorts first by userid and then, within each userid value, sorts by score.
+
+ Let's say we want to find male with age>=40
+ 
+ Here we can consider using compund Index
+ 
+ db.contacts.createIndex({"dob.age":1,gender:1})
+ 
+ Obviously the order in which we write document matters how indexing will be done it won't create 2 indexes 
+ 
+ It will create  one index like  30 male 30 male 30 female 31 male 31 female
+ 
+ we can use index from left to right like alone age, age+gender but we can't use alone gender
+ 
+ Basically if you want to use ith index then you can't use it without using 0-i-1 or create single field
+ 
+ ********************************************************************************************************************
+
+Indexes for Sorting!
+
+db.contacts.explain("executionStats").find({"dob.age":35}).sort({gender:1})
+
+It will use IXSCAN means indexing to sort!
+
+If you are not using indexes and you have large amount of indexes and you sort you might timeout 32mb Limit
+
+If indexing is not there then mongodb will fetch all documents in memory and do the sorting
+ 
+ 
+db.mycollection.getIndexes()
+
+It will list all indexes!
+
+Unique indexes can help you to ensure no duplicates
+
+db.contacts.createIndex({email:1},{unique:true})
+
+If there are no duplicates then it will create index or create index before inserting values
