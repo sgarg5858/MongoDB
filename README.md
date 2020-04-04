@@ -733,3 +733,139 @@ Upsert:
 db.userData.updateOne({name:"Prim"},{$set:{age:22,Hobbies:[{name:"Reading",freq:1}]}},{upsert:true})  
 
 If it find document then it will override otherwise create new one
+
+
+**********************************************************************************************************************
+UPDATING MATCHED ARRAY ELEMENTS:
+
+Adding new field to existing field:
+
+Suppose we want to add new field to users who like cooking Like perDay freq say =2
+
+db.userData.updateMany({hobbies :{$elemMatch: {name:"cooking", freq: {$gte:4}} } },{$set:{ "hobbies.$.perDayFreq":2}}) 
+
+What this will do is find documents having hobby of cooking with freq>=4 and if we want to update the field using what we found data
+
+here we are reffering to Cooking in hobbies then use hobbies.$.FieldName
+
+This $ sign hobbies.$ is helpful we want to update specific element in array which you used for searching
+
+We can also update other elements inside $set.
+
+{
+        "_id" : ObjectId("5e847eecb5eb2cf2a5011105"),
+        "name" : "sanyam",
+        "phone" : 9041234556,
+        "hobbies" : [
+                {
+                        "name" : "cooking",
+                        "freq" : 4,
+                        "perDayFreq" : 2  //check this 
+                },
+                {
+                        "name" : "reading",
+                        "freq" : 7
+                }
+        ],
+        "college" : "UIET",
+        "currAge" : 31.5,
+        "year" : NaN
+}
+
+**************************************************************************************************************************
+UPDATE ALL ARRAY ELEMENTS:
+
+Suppose we search for all embedded documents in  hobbies who have frequency >=4 and we want to update all who matched
+
+'But if we use above method it will only updated which embedded document matched first for each person and if there are multiple
+
+matching documents in array it won't update them all
+
+db.userData.updateMany({"hobbies.freq":{$gte:4}},{$set: {"hobbies.$.goodFreq": true} }) 
+
+It will update First Matching Document
+
+
+
+{
+        "_id" : ObjectId("5e847eecb5eb2cf2a5011105"),
+        "name" : "sanyam",
+        "phone" : 9041234556,
+        "hobbies" : [
+                {
+                        "name" : "cooking",
+                        "freq" : 4,
+                        "perDayFreq" : 2,
+                        "goodFreq" : true
+                },
+                {
+                        "name" : "reading",
+                        "freq" : 7
+                }
+        ],
+        "college" : "UIET",
+        "currAge" : 31.5,
+        "year" : NaN
+}
+
+Check this won't update reading as it will only update first matching!
+
+$ sign simply refers to first match!
+
+$[] simply tells update all elements in Array no matter matched or not!
+
+db.userData.updateMany({"hobbies.freq":{$gte:4}},{$set: {"hobbies.$[].daily": false} })  
+
+{
+        "_id" : ObjectId("5e847eecb5eb2cf2a5011104"),
+        "name" : "Sanjay",
+        "hobbies" : [
+                {
+                        "name" : "cooking",
+                        "freq" : 4,
+                        "perDayFreq" : 2,
+                        "goodFreq" : false,
+                        "daily" : false
+                },
+                {
+                        "name" : "reading",
+                        "freq" : 7,
+                        "goodFreq" : false,
+                        "daily" : false
+                }
+        ],
+        "currAge" : 20,
+        "year" : NaN
+}
+
+*******************************************************************************************************************
+UPDATING SELECTED FIELDS IN ARRAY!
+
+db.userData.updateMany({"hobbies.freq":{$gte:5}},{$set: {"hobbies.$[el].enjoys":true}},{arrayFilters: [ {"el.freq": {$gt:5}} ] })  
+
+el filters embedded document in array for applying changes
+
+
+{
+        "_id" : ObjectId("5e876b784105a1424b7bc60c"),
+        "name" : "Prim",
+        "age" : 21,
+        "hobbies" : [
+                {
+                        "name" : "Reading",
+                        "freq" : 1,
+                        "daily" : false
+                },
+                {
+                        "name" : "Reading",
+                        "freq" : 1,
+                        "daily" : false
+                },
+                {
+                        "name" : "Cricket",
+                        "freq" : 8,
+                        "daily" : false,
+                        "enjoys" : true
+                }
+        ]
+}
