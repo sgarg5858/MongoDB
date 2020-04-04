@@ -927,4 +927,56 @@ $addToSet
 
 We can add values to Array using $addToSet instead of $push so what is difference
 
-if you try to add same document push will allow it but $addToSet will not allow duplicate Values
+if you try to add same document push will allow it but $addToSet will not allow duplicate Values.
+
+**********************************************************************************************************************************
+INDEXES
+**********************************************************************************************************************************
+Why Use Indexes?
+
+Using Indexes can speed up find,delete and update queries!
+
+By Default mongodb has no index!
+
+Suppose you have to find a document with name:"Sanjay" then mongodb will go through entire collection which may contain thousands of
+
+documents and it may take a while!
+
+In indexes values are sorted by key and indexes contains references to full documents!
+
+Don't Use too Many Indexes because Indexes speeds up find() queries but indexes doesn't come for free!
+
+Because we have to update indexes for every inserts!
+
+**********************************************************************************************************************************
+
+Adding Single Field Indexes!
+
+ db.contacts.explain("executionStats").find({"dob.age":{$gt:60}}).count() 
+ 
+ We can use this command to check how mongoDB executed the query and how many documents it check and time it took.
+ 
+ Let's add index!
+ 
+ db.contacts.explain("executionStats").find({"dob.age":{$gt:60}}).count() 
+ 
+ Without Index it took 5 milliseconds
+ 
+ db.contacts.createIndex({"dob.age":1})    // 1 means ascending order -1 means descending order!
+ 
+  
+ Without Index it took 1 milliseconds
+ 
+ 
+ Disadvantges:
+ 
+ when query returns large part of documents then using index can be slower as it will first go through indexes and then it will through
+ 
+ a large number of documents.
+ 
+ So if you have queries which returns majorly or all documents then index might not help you it you will do full scan and all documents
+
+ will already be in memory indexing will just add another step and will lead to extra time.
+ 
+ Indexes are helpful when you narrow down or need small number of documents.
+ 
