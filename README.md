@@ -869,3 +869,62 @@ el filters embedded document in array for applying changes
                 }
         ]
 }
+**********************************************************************************************************************
+
+Adding New Hobbies to existing Hobbies Array:
+
+$push
+
+db.userData.updateOne({name:"Sanjay"},{$push: {hobbies:{name:"Running",freq:7}}})   
+
+{
+        "_id" : ObjectId("5e847eecb5eb2cf2a5011104"),
+        "name" : "Sanjay",
+        "hobbies" : [
+                {
+                        "name" : "cooking",
+                        "freq" : 4,
+                        "perDayFreq" : 2,
+                        "goodFreq" : false,
+                        "daily" : false
+                },
+                {
+                        "name" : "reading",
+                        "freq" : 7,
+                        "goodFreq" : false,
+                        "daily" : false,
+                        "enjoys" : true
+                },
+                {
+                        "name" : "Running",
+                        "freq" : 7
+                }
+        ],
+        "currAge" : 20,
+        "year" : NaN
+}
+
+db.userData.updateOne({name:"Sanjay"},{$push: {hobbies: {$each: [{name:"Coding",freq:7},{name:"Dancing",freq:4}],$sort:{freq:-1}}}})
+
+For Adding multiples documents to Array and we can also sort  all the values !
+
+***********************************************************************************************************************************
+
+Deleting Values From Array!
+
+$pull
+
+db.userData.updateOne({name:"Sanjay"},{$pull: {hobbies:{name:"Running"}}})  
+
+Sometimes you just want to remove last element from array
+
+$pop
+
+db.userData.updateOne({name:"Prim"},{$pop: {hobbies:1}})   1 for last -1 for first
+
+**********************************************************************************************************************************
+$addToSet
+
+We can add values to Array using $addToSet instead of $push so what is difference
+
+if you try to add same document push will allow it but $addToSet will not allow duplicate Values
