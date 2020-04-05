@@ -1043,3 +1043,47 @@ Unique indexes can help you to ensure no duplicates
 db.contacts.createIndex({email:1},{unique:true})
 
 If there are no duplicates then it will create index or create index before inserting values
+
+*********************************************************************************************************************
+Partial Indexes:
+
+Let's say we are building an application where we want to how much people will get after they retire
+
+You typically look for people older than 60.AGE or DOB using as index makes sense. But the problem is there are range of ages
+
+which exists and are never queried.Index will be efficient but large index eats up size on disk.
+
+We can actually create a partial index where you only add the values you regularly look at.
+
+Let's create an index for age for only males as if most of our queries are for males! we can do the same for females
+
+db.contacts.createIndex({"dob.age":1},{partialFilterExpression: {gender:"male"}})
+
+If we mostly search for age>60
+
+db.contacts.createIndex({"dob.age":1},{partialFilterExpression: {"dob.age":{$gt:60}}}) 
+
+Creating an index with age for only males makes sense when we rarely serach for females !
+
+************************************************************************************************************************
+Unique Indexes
+
+db.users.insertMany([{name:"Sanjay",email:"s@gmail.com"},{name:"Sanyam"}])
+
+db.users.createIndex({email:1},{unique:true})  
+
+created index of email in ascending order with unique values only if any document doesn't have this field it will treated as null
+
+and multiple documents can't have null as only unique values are allowed.
+
+db.users.insertMany([{name:"Prim",email:"p@gmail.com"},{name:"Aartik"}])
+
+Here aartik doesn't have email so it will give error for duplicate key as index demands unique values only and it won't be added.
+
+But sometimes we have to create index using field where field can be missing for some persons
+
+I only want to add elements to my index when email exists
+
+db.User.createIndex({email:1},{unique:true,partialFilterExpression:{email:{$exists:true}}})
+
+
