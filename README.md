@@ -1086,4 +1086,11 @@ I only want to add elements to my index when email exists
 
 db.User.createIndex({email:1},{unique:true,partialFilterExpression:{email:{$exists:true}}})
 
+*****************************************************************************************************************************
 
+Query Diagonisis
+
+db.myCollection.explain("executionStats").find({})
+
+Suppose we habe hobbbies field which have value array of text;
+If we create
