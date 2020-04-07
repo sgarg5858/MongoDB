@@ -1182,5 +1182,46 @@ What if we want to find any particular phrase like "Nike Jordan"
         "title" : "Shoe",
         "desc" : "Nike Jordan"
 }
+********************************************************************************************************************************
+Compound Text Indexes:
+
+When we have multiple text fields and we want to use multiple fields for indexing then what we can do is merge the text of fields
+
+for indexing.
+
+db.products.createIndex({title:"text",desc:"text"})
+
+Let's check by searching shoe
+
+
+> db.products.find({$text:{$search:"Shoe"}}).pretty()
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c46"),
+        "title" : "Shoe",
+        "desc" : "Nike Jordan"
+}
+
+drop text Index by Name of Index
+
+If during search we want to exculde some text use - sign in front of it like below -Brand
+
+ db.products.find({$text:{$search:"Nike -Brand"}}).pretty()
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c46"),
+        "title" : "Shoe",
+        "desc" : "Nike Jordan"
+}
+
+**********************************************************************************************************************************
+Building Index:
+
+There are two ways of creating Index! Foreground and BackGround(Helpful for Production)
+
+Foreground block the collection and is faster
+
+Background doesn't block the collection and is slower
+
+db.mycollection.createIndex({age:1},{background=true}) By default it is false.
+
 
 
