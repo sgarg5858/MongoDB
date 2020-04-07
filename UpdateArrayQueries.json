@@ -1,0 +1,77 @@
+1.Initial Document!
+
+{
+        "_id" : ObjectId("5e8c0f50ad0755f367ea8c43"),
+        "name" : "Sanjay",
+        "hobbies" : [
+                {
+                        "name" : "Running",
+                        "freq" : 5
+                },
+                {
+                        "name" : "Reading",
+                        "freq" : 3
+                },
+                {
+                        "name" : "Coding",
+                        "freq" : 7
+                }
+        ]
+}
+
+2.. let's add new field to all hobbies embedded document meeting the criteria
+
+db.persons.updateOne({"hobbies.freq": {$gte:3}},{$set: {"hobbies.$[el].enjoys":true}},{arrayFilters: [ {"el.freq":{$gte:5}}]} )
+
+{
+        "_id" : ObjectId("5e8c0f50ad0755f367ea8c43"),
+        "name" : "Sanjay",
+        "hobbies" : [
+                {
+                        "name" : "Running",
+                        "freq" : 5,
+                        "enjoys" : true
+                },
+                {
+                        "name" : "Reading",
+                        "freq" : 3
+                },
+                {
+                        "name" : "Coding",
+                        "freq" : 7,
+                        "enjoys" : true
+                }
+        ]
+}
+
+see Reading doesn't get new field
+
+3. Let's add new hobbies to hobbies array using $push
+
+db.persons.updateOne({name:"Sanjay"},{$push:{hobbies:{name:"Sleeping",freq:7}}})
+
+{
+        "_id" : ObjectId("5e8c0f50ad0755f367ea8c43"),
+        "name" : "Sanjay",
+        "hobbies" : [
+                {
+                        "name" : "Running",
+                        "freq" : 5,
+                        "enjoys" : true
+                },
+                {
+                        "name" : "Reading",
+                        "freq" : 3
+                },
+                {
+                        "name" : "Coding",
+                        "freq" : 7,
+                        "enjoys" : true
+                },
+                {
+                        "name" : "Sleeping",
+                        "freq" : 7
+                }
+        ]
+}
+ 
