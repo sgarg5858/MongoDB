@@ -1094,3 +1094,22 @@ db.myCollection.explain("executionStats").find({})
 
 Suppose we habe hobbbies field which have value array of text;
 If we create
+
+********************************************************************************************************************************
+
+MultiKey Indexes:
+
+db.contacts.insertMany([{name:"Sanjay",hobbies:["cooking","coding","music"],contact:[{phone:"9041421558",company:"airtel"}]}])
+
+If we are creating index using hobbies field which is an array then it will use all values in array for indexing and the values in this
+
+array will point to same document.
+
+db.contacts.createIndex({hobbies:1})
+
+How to create index on field inside an array which contains emdedded documents
+
+ db.contacts.createIndex({"contact.phone":1})
+ 
+ We can also use Documents in Array for Indexing !
+
