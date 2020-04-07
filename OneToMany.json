@@ -1,0 +1,75 @@
+One to Many:
+
+Authors:
+
+ordered=false.  If one insertion fails it should not hault the transaction there is should try all next documents!
+
+writeConcern -> journal=true  using journal to keep track of operation that are to be done from memory to disk
+
+Only used if server goes down so server can use it to do the pending operations1
+
+1. db.authors.insertMany([{_id:5,name:"Ankit"},{_id:6,name:"Varun"}],{ordered:false,writeConcern:{w: 1,j:true}})
+
+Books:
+
+2. db.books.insertMany([{name:"Mitro",authors:[5,6]},{name:"Bakchodi",authors:[3,4]}],{ordered:false,writeConcern:{w:1,j:true}})
+
+Query!
+
+3. db.books.aggregate([ {$lookup: {from:"authors",localField:"authors",foreignField:"_id",as:"writers"} }]).pretty()
+
+{
+        "_id" : ObjectId("5e8c01edad0755f367ea8c3c"),
+        "name" : "MongoDB",
+        "authors" : [
+                1,
+                2
+        ],
+        "writers" : [
+                {
+                        "_id" : 1,
+                        "name" : "Sanjay"
+                },
+                {
+                        "_id" : 2,
+                        "name" : "Rishabh"
+                }
+        ]
+}
+{
+        "_id" : ObjectId("5e8c049dad0755f367ea8c3d"),
+        "name" : "Mitro",
+        "authors" : [
+                5,
+                6
+        ],
+        "writers" : [
+                {
+                        "_id" : 5,
+                        "name" : "Ankit"
+                },
+                {
+                        "_id" : 6,
+                        "name" : "Varun"
+                }
+        ]
+}
+{
+        "_id" : ObjectId("5e8c049dad0755f367ea8c3e"),
+        "name" : "Bakchodi",
+        "authors" : [
+                3,
+                4
+        ],
+        "writers" : [
+                {
+                        "_id" : 3,
+                        "name" : "Prim"
+                },
+                {
+                        "_id" : 4,
+                        "name" : "Sanyam"
+                }
+        ]
+}
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
