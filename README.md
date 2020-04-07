@@ -1223,5 +1223,70 @@ Background doesn't block the collection and is slower
 
 db.mycollection.createIndex({age:1},{background=true}) By default it is false.
 
+*********************************************************************************************************************************
+AGGREGATION FRAMEWORK
+*********************************************************************************************************************************
+
+What is Aggregation Framework?
+
+We can say it is just alternative to find method.
+
+Aggreagation Framework is all about building the pipeline of steps that runs on data which is retrieved from your collection.
+
+and then gives you the ouput in the form you needed.
+
+*********************************************************************************************************************************
+Using The Aggregation Framework:
+
+db.mycollection.aggregate([]) It takes an argument of array so that we can specify multiple steps to build pipeline.
+
+Aggregate runs on server so we can make use of indexes to filter out documents or just take required docs without going through
+
+all Collection.
+
+db.persons.aggregate([ 
+                      {$match: {gender: "female"}} 
+                      ]).pretty() 
+ 
+Above Query is a pipeline of 1 stage we can add multiple stages like that
+
+$match is a simple stage to filter out documents.
+***********************************************************************************************************************************
+GROUP STAGE:
+
+db.persons.aggregate([ 
+                      {$match: {gender:"female"}}, {
+                      $group: { _id: { state: "$location.state" }, totalPersons: { $sum:1} } } 
+                      ]).pretty() 
 
 
+_id defines by which field you want to group. and second document there defines the operation you want to execute.
+
+Sorting the Results
+
+ db.persons.aggregate([ 
+			{ $match: { gender: "female"}}, 
+			{ $group: { _id: { state: "$location.state" }, totalPersons: { $sum:1} } },
+			{ $sort: { totalPersons: -1}}
+		      ]).pretty()
+          
+         
+         
+         
+Let's say we want to first filter persons with age>50 and then we group these persons by gender and find number of persons in there,
+
+and average age per group and then sort the result by the number of Persons per Group.
+
+db.persons.aggregate([
+	{ $match: { "dob.age": {$gt: 50 } } },
+	{ 
+	  $group: {
+	     _id: { gender: "$gender" } , 
+	     numPersons: { $sum: 1 },
+	     averageAge: { $avg: "$dob.age" }
+		  }
+	},
+        { $sort: { numPersons: -1}} 
+	]).pretty()
+  
+ *****************************************************************************************************************************
