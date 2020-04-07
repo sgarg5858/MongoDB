@@ -1290,3 +1290,107 @@ db.persons.aggregate([
 	]).pretty()
   
  *****************************************************************************************************************************
+$project
+
+Now let's look at the different pipeline where we can transform every document instead of grouping.
+
+db.persons.aggregate([
+    {
+      $project: {
+        _id: 0,
+        gender: 1,
+        fullName: {
+          $concat: [
+            { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.first',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] }
+              ]
+            },
+            ' ',
+            { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.last',
+                1,
+                { $subtract: [{ $strLenCP: '$name.last' }, 1] }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]).pretty();
+  
+  $ tells mongo db that this is not hardcoded value it refers to field and we have to take the value for this field
+  ************************************************************************************************************************
+  
+ $group vs $ project
+ 
+ In group we do counting,avaeraging,summing in projection we transform Data!
+ 
+ **************************************************************************************************************************
+Pushing Data into Newly Created Elements: While Grouping
+
+Data Used In Example:   
+
+ https://github.com/sgarg5858/MongoDB/blob/master/array.json
+
+db.friend.aggregate([
+	{$group: { _id: {age: "$age"}, allHobbies:{$push: "$hobbies" } } }
+	]).pretty()
+Using above query it will push the arrays It will create array of arrays!
+
+{
+        "_id" : {
+                "age" : 29
+        },
+        "allHobbies" : [
+                [
+                        "Sports",
+                        "Cooking"
+                ],
+                [
+                        "Cooking",
+                        "Skiing"
+                ]
+        ]
+}
+
+What if we want to push the values in One Array
+
+$unwind is the great stage when you want to pull elements from array!
+
+What unwind does is it flattens the array and will create multiple documents where each hobbie will be one element instead of Array
+
+Merging all documents will the whole array
+
+ db.friend.aggregate([
+... {$unwind: "$hobbies"},
+... {$group: { _id: {age: "$age"}, allHobbies:{$addToSet: "$hobbies" } } }
+... ]).pretty()
+
+Output:
+{
+        "_id" : {
+                "age" : 29
+        },
+        "allHobbies" : [
+                "Sports",
+                "Cooking",
+                "Skiing"
+        ]
+}
+{
+        "_id" : {
+                "age" : 30
+        },
+        "allHobbies" : [
+                "Data Analytics",
+                "Eating"
+        ]
+}
+ 
+ *********************************************************************************************************************
