@@ -1092,8 +1092,6 @@ Query Diagonisis
 
 db.myCollection.explain("executionStats").find({})
 
-Suppose we habe hobbbies field which have value array of text;
-If we create
 
 ********************************************************************************************************************************
 
@@ -1112,4 +1110,77 @@ How to create index on field inside an array which contains emdedded documents
  db.contacts.createIndex({"contact.phone":1})
  
  We can also use Documents in Array for Indexing !
+
+We can create compund index which can contain max one compound index and rest single field indexes.
+
+We cannot create compound index made of both multikey Indexes because it will have to store cartesian prooduct which is not efficient.
+
+***********************************************************************************************************************************
+Text Index:
+
+Text Index is special Kind of Multikey Index!
+
+We saw before we can use regex operator for searching text but it is of low performance.
+
+It turns text into array of single words then remove stopwords then uses multikey indexes for indexing
+
+Text Indexes are Expensive We can have only one text Index per Collection.
+
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c45"),
+        "title" : "Tshirt",
+        "desc" : "Nike Brand"
+}
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c46"),
+        "title" : "Shoe",
+        "desc" : "Nike Jordan"
+}
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c47"),
+        "title" : "Phone",
+        "desc" : "Iphone 11"
+}
+Creating Text Index:
+
+db.products.createIndex({desc:"text"})
+
+Using Single Word
+
+1. db.products.find({$text:{$search:"Nike"}}).pretty()
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c46"),
+        "title" : "Shoe",
+        "desc" : "Nike Jordan"
+}
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c45"),
+        "title" : "Tshirt",
+        "desc" : "Nike Brand"
+}
+
+2.db.products.find({$text:{$search:"Jordan Brand"}}).pretty()
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c45"),
+        "title" : "Tshirt",
+        "desc" : "Nike Brand"
+}
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c46"),
+        "title" : "Shoe",
+        "desc" : "Nike Jordan"
+}
+
+In 2 it will look for individual words in every document.
+
+What if we want to find any particular phrase like "Nike Jordan"
+
+3.
+ db.products.find({$text:{$search:"\"Nike Jordan\""}}).pretty()
+{
+        "_id" : ObjectId("5e8c29fead0755f367ea8c46"),
+        "title" : "Shoe",
+        "desc" : "Nike Jordan"
+}
+
 
