@@ -1394,3 +1394,59 @@ Output:
 }
  
  *********************************************************************************************************************
+Using Projection with Arrays:
+
+ db.friend.aggregate([
+	 { $project: {_id:0, examScore: { $slice: ["$examScores",2,1] } } }
+	]).pretty()
+
+
+{ "examScore" : [ { "difficulty" : 3, "score" : 88.5 } ] }
+{ "examScore" : [ { "difficulty" : 5, "score" : 53.1 } ] }
+{ "examScore" : [ { "difficulty" : 6, "score" : 61.5 } ] }
+
+Suppose examScores has three 3 documents or elements in Array then it will show 2 and 3 it will skip first $slice operation
+
+Now what if we don't want difficult we only want score
+
+db.friend.aggregate([
+	{ $project: {_id:0, examScore: { $slice: ["$examScores",2,1] } } },
+	{$project: {"examScore.score":1}}
+	]).pretty()
+	
+	
+{ "examScore" : [ { "score" : 88.5 } ] }
+{ "examScore" : [ { "score" : 53.1 } ] }
+{ "examScore" : [ { "score" : 61.5 } ] }
+
+$size operator 
+
+db.friend.aggregate([
+	{ $project: {_id:0,
+		      name:1, 
+                      totalExamsTaken: {$size: "$examScores"},
+		      exams:{ $slice: ["$examScores",0,3] } } }
+	
+	]).pretty()
+	
+{
+        "name" : "Max",
+        "totalExamsTaken" : 3,
+        "exams" : [
+                {
+                        "difficulty" : 4,
+                        "score" : 57.9
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 62.1
+                },
+                {
+                        "difficulty" : 3,
+                        "score" : 88.5
+                }
+        ]
+}
+
+***********************************************************************************************************************************
+                        
