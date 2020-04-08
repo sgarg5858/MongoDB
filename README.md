@@ -1368,9 +1368,9 @@ What unwind does is it flattens the array and will create multiple documents whe
 Merging all documents will the whole array
 
  db.friend.aggregate([
-... {$unwind: "$hobbies"},
-... {$group: { _id: {age: "$age"}, allHobbies:{$addToSet: "$hobbies" } } }
-... ]).pretty()
+	{$unwind: "$hobbies"},
+	{$group: { _id: {age: "$age"}, allHobbies:{$addToSet: "$hobbies" } } }
+	]).pretty()
 
 Output:
 {
@@ -1449,4 +1449,125 @@ db.friend.aggregate([
 }
 
 ***********************************************************************************************************************************
-                        
+$filter:
+
+Now we want to look at only scores >60!
+
+db.friend.aggregate([
+	{ $project: {_id:0,
+		      name:1, 
+		      examScores:{ $filter: {input : "$examScores", as: "sc", cond: { $gt :["$$sc.score",60 ] } }  } 
+	} }
+	
+	]).pretty()
+
+Here look at as it gives every examScore in examScores Array a local name and look at $$ sign which is rarely used.It is used to refer
+
+to local variable "sc" which points to every document in examScores Array !
+
+{
+        "name" : "Max",
+        "examScores" : [
+                {
+                        "difficulty" : 6,
+                        "score" : 62.1
+                },
+                {
+                        "difficulty" : 3,
+                        "score" : 88.5
+                }
+        ]
+}
+************************************************************************************************************************************
+
+Finding Max Scores:
+
+db.friend.aggregate([
+	
+{ $project: {_id:0,
+		      name:1,
+                      totalExamsTaken: {$size: "$examScores"},
+		      highestScore:{$max: "$examScores.score" } } }
+	]).pretty()
+
+{ "name" : "Max", "totalExamsTaken" : 3, "highestScore" : 88.5 }
+
+{ "name" : "Manu", "totalExamsTaken" : 3, "highestScore" : 74.3 }
+
+{ "name" : "Maria", "totalExamsTaken" : 3, "highestScore" : 75.1 }
+
+Alternative:
+
+db.friend.aggregate([
+		{$unwind: "$examScores"},
+		{$sort :{"examScores.score": -1}},
+		{$group: { _id: {name: "$name" }, highestScore: {$max: "$examScores.score"} } },
+		{$sort: { highestScore: -1}}
+		]).pretty()
+		
+{ "_id" : { "name" : "Max" }, "highestScore" : 88.5 }
+
+{ "_id" : { "name" : "Maria" }, "highestScore" : 75.1 }
+
+{ "_id" : { "name" : "Manu" }, "highestScore" : 74.3 }
+
+
+****************************************************************************************************************
+
+$bucket:
+
+Understanding the distribution of the data:
+
+The bucket allows you to output your data in buckets
+
+db.persons.aggregate( [
+	{
+	  $bucket: {	
+	     groupBy: "$dob.age",
+	     boundaries: [18,30,50,100],
+	     output: {
+		numPersons: {$sum:1},
+		averageAge:{$avg: "$dob.age"}
+		
+		     }
+		}
+	}
+	]).pretty()
+	
+
+{ "_id" : 18, "numPersons" : 868, "averageAge" : 25.101382488479263 }
+
+{ "_id" : 30, "numPersons" : 1828, "averageAge" : 39.4917943107221 }
+
+{ "_id" : 50, "numPersons" : 2304, "averageAge" : 61.46440972222222 }
+
+*************************************************************************************************************************************
+
+db.persons.aggregate([
+    { $match: { gender: "male" } },
+    { $project: { _id: 0, gender: 1, name: { $concat: ["$name.first", " ", "$name.last"] }, birthdate: { $toDate: "$dob.date" } } },
+    { $sort: { birthdate: 1 } },
+    { $skip: 10 },
+    { $limit: 10 }
+  ]).pretty();
+  
+  ***************************************************************************************************************
+  
+  Writing PipeLine result to new Collection:
+  
+  db.persons.aggregate( [
+	{
+	  $bucket: {	
+	     groupBy: "$dob.age",
+	     boundaries: [18,30,50,100],
+	     output: {
+		numPersons: {$sum:1},
+		averageAge:{$avg: "$dob.age"}
+		
+		     }
+		}
+	},
+	{$out: "statistics"}
+	]).pretty()
+	
+$out helps to write the results to new collection
